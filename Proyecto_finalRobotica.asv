@@ -1,0 +1,60 @@
+clc; clear all; close all;
+
+% Crear objeto Arduino
+a = arduino('COM6', 'Uno', 'Libraries', 'Servo');
+
+% Adjuntar los servos a los pines correspondientes
+servo1 = servo(a, 'D3');
+servo2 = servo(a, 'D5');
+servo3 = servo(a, 'D6');
+
+% Mover los servos a la posición inicial
+writePosition(servo1, 90/180); % Posición inicial en grados
+writePosition(servo2, 90/180); % Posición inicial en grados
+writePosition(servo3, 0/90);  % Posición inicial en grados
+
+% Parámetros del robot
+a1 = 12;
+a2 = 10;
+a3 = 0;
+d = 17;
+d2 = 17;
+
+L1 = Revolute('a',a1,'alpha',0,'d',d);
+L2 = Revolute('a',a2,'alpha',pi,'d',0);
+L3 = Prismatic('a',0,'alpha',0,'theta',0,'qlim',[0, 1]);
+bot = SerialLink([L1, L2, L3]);
+
+% Animación
+ws = [-15, 15, -18, 18, 0, 17];
+bot.teach([pi/2, pi/2, 0], 'workspace', ws, 'noname');
+
+% Cálculo de cinemática directa
+p = zeros(3, 1);
+while true
+    input('Presione Enter para iniciar la cinemática directa');
+
+    % Obtener las posiciones de las articulaciones
+    q = bot.getpos();
+
+    % Convertir las posiciones de las articulaciones de radianes a grados
+    posx = round(rad2deg(q(1)));
+    posy = round(rad2deg(q(2)));
+    posz = round(q(3)); % No se necesita conversión
+
+    % Calcular la posición del efector final
+    p(1) = a1 * cos(q(1)) + a2 * cos(q(1) + q(2));
+    p(2) = a1 * sin(q(1)) + a2 * sin(q(1) + q(2));
+    p(3) = d - q(3);
+
+    disp('Posición del efector final:');
+    disp(p);
+
+    % Mover los servos a las posiciones calculadas
+    writePosition(servo1, posx / 180); % Convertir de grados a rango [0, 1]
+    writePosition(servo2, posy / 180); % Convertir de grados a rango [0, 1]
+    writePosition(servo3, posz / 180); % Convertir de grados a rango [0, 1]
+
+    % Pausar para dar tiempo a que los servos se muevan
+    pause(1);
+end

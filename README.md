@@ -4,9 +4,18 @@
 
 *Bridging simulation and real-world robotics through kinematics, visualization, and embedded control.*
 
-![Animation](media/animation.gif)
 
----
+<p align="center">
+  <img src="https://github.com/AngiePGiraldo/Scara-Robot/blob/7dc02689a63a8513fe85557b50cda4db10036423/Scara1.png" width="480"/>
+  <img src="https://github.com/AngiePGiraldo/Scara-Robot/blob/7dc02689a63a8513fe85557b50cda4db10036423/Scara2.jpeg" width="313"/>
+</p>
+
+## 🎥 Demo
+
+You can see the robot in action at the following link:  
+
+[▶️ View SCARA Demo](https://youtu.be/IB_ZaRQqcX8)
+
 
 ## 📌 Overview
 This project presents the development of a SCARA (Selective Compliance Assembly Robot Arm) robot, including its modeling, simulation, animation, and physical implementation using MATLAB and Arduino.
